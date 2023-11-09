@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/QuickNoteTest/static/css/main.d4b8daa7.css",
+    "main.js": "/QuickNoteTest/static/js/main.760b8c99.js",
+    "index.html": "/QuickNoteTest/index.html",
+    "main.d4b8daa7.css.map": "/QuickNoteTest/static/css/main.d4b8daa7.css.map",
+    "main.760b8c99.js.map": "/QuickNoteTest/static/js/main.760b8c99.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d4b8daa7.css",
+    "static/js/main.760b8c99.js"
+  ]
+}
