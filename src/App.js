@@ -4,7 +4,7 @@ import {FiSettings} from 'react-icons/fi';
 import {TooltipComponent} from '@syncfusion/ej2-react-popups';
 
 import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
-import { Home, Login, NoteTable, Folder, Garbage } from './pages';
+import { Home, Login, NoteTable, Folder, Garbage, NewNote, FinalNote } from './pages';
 import './App.css';
 
 import { useStateContext } from './contexts/ContextProvider';
@@ -58,6 +58,8 @@ function App() {
               <Route path="/user/notes" element={<NoteTable />} />
               <Route path="/folder" element={<Folder />}/>
               <Route path="/garbage" element={<Garbage />} />
+              <Route path="/new" element={<NewNote />} />
+              <Route path="/final" element={<FinalNote />} />
             </Routes>
           </div>
 
