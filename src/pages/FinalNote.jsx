@@ -53,13 +53,14 @@ const FinalNote = () => {
         const reorderedStores = [...stores];
   
         const storeSourceIndex = source.index;
-        const storeDestinatonIndex = destination.index;
+        const storeDestinationIndex = destination.index;
   
         const [removedStore] = reorderedStores.splice(storeSourceIndex, 1);
-        reorderedStores.splice(storeDestinatonIndex, 0, removedStore);
+        reorderedStores.splice(storeDestinationIndex, 0, removedStore);
   
         return setStores(reorderedStores);
       }
+
       const itemSourceIndex = source.index;
       const itemDestinationIndex = destination.index;
   
@@ -85,6 +86,7 @@ const FinalNote = () => {
         ...stores[storeSourceIndex],
         items: newSourceItems,
       };
+      
       newStores[storeDestinationIndex] = {
         ...stores[storeDestinationIndex],
         items: newDestinationItems,
