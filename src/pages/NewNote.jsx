@@ -1,5 +1,6 @@
 import React from 'react';
-import { Header } from '../components';
+import { Header, User } from '../components';
+
 
 const NewNote = () => {
   return (
@@ -7,7 +8,8 @@ const NewNote = () => {
       <Header category="Page" title="New Note"/>
       <div className="flex space-even items-center gap-x-8">
         <div className="bg-gray-200 w-[800px] h-[700px] p-3  rounded-lg shadow-xl">
-            Sample text
+            <User name="User 1" text="안녕하세요"/>
+            <User name="User 2" text="안녕하세요 ~ ^^" />
         </div>
         <div className="bg-gray-200 w-[300px] h-[500px] p-3  rounded-lg shadow-xl">
             text

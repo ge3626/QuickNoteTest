@@ -8,3 +8,4 @@ export { default as Notification} from './Notification';
 export { default as ThemeSettings} from './ThemeSettings';
 export { default as DraggableItem } from './DraggableItem';
 export { default as DroppableCell } from './DroppableCell';
+export { default as User } from './User';
