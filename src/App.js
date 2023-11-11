@@ -59,7 +59,7 @@ function App() {
               <Route path="/folder" element={<Folder />}/>
               <Route path="/garbage" element={<Garbage />} />
               <Route path="/new" element={<NewNote />} />
-              <Route path="/final" element={<FinalNote />} />
+              <Route path="/finalNote" element={<FinalNote />} />
             </Routes>
           </div>
 

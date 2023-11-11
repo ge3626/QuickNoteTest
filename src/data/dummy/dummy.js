@@ -14,6 +14,10 @@ export const links1 = [
                 icon: <FiEdit />,
             },
             {
+                name: 'finalNote',
+                icon: <FiEdit  />,
+            },
+            {
                 name: 'garbage',
                 icon: <FiTrash2 />,
             },

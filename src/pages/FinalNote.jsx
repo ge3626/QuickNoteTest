@@ -1,184 +1,109 @@
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-const DATA = [
+import { DraggableItem, DroppableCell } from '../components';
+
+const datas = [
   {
-    id: "0e2f0db1-5457-46b0-949e-8032d2f9997a",
-    name: "Walmart",
-    color: "bg-red-600",
-    tint: 1,
+    id: 1,
+    name: "주제",
+    color: "bg-red-500",
   },
   {
-    id: "487f68b4-1746-438c-920e-d67b7df46247",
-    name: "Indigo",
-    color: "bg-purple-600",
-    tint: 2,
+    id: 2,
+    name: "날짜",
+    color: "bg-yellow-500",
   },
   {
-    id: "25daffdc-aae0-4d73-bd31-43f73101e7c0",
-    name: "Lowes",
-    color: "bg-yellow-300",
-    tint: 3,
+    id: 3,
+    name: "세 줄 요약",
+    color: "bg-green-500",
   },
   {
     id: 4,
-    name: "test4",
-    color: "bg-green-500",
-    tint: 4,
+    name: "회의 내용",
+    color: "bg-blue-500",
   },
   {
     id: 5,
-    name: "test5",
-    color: "bg-blue-600",
-    tint: 5,
+    name: "To Do List",
+    color: "bg-purple-500",
   }
 ];
 
 const FinalNote = () => {
+  const [itemContainer, setItemContainer] = useState([]);
+  const [gridItemContainer, setGridItemContainer] = useState([]);
 
-    const [stores, setStores] = useState(DATA);
-  
-    const handleDragAndDrop = (results) => {
-      const { source, destination, type } = results;
-  
-      if (!destination) return;
-  
-      if (
-        source.droppableId === destination.droppableId &&
-        source.index === destination.index
-      )
-        return;
-  
-      if (type === "group") {
-        const reorderedStores = [...stores];
-  
-        const storeSourceIndex = source.index;
-        const storeDestinatonIndex = destination.index;
-  
-        const [removedStore] = reorderedStores.splice(storeSourceIndex, 1);
-        reorderedStores.splice(storeDestinatonIndex, 0, removedStore);
-  
-        return setStores(reorderedStores);
-      }
-      const itemSourceIndex = source.index;
-      const itemDestinationIndex = destination.index;
-  
-      const storeSourceIndex = stores.findIndex(
-        (store) => store.id === source.droppableId
-      );
-      const storeDestinationIndex = stores.findIndex(
-        (store) => store.id === destination.droppableId
-      );
-  
-      const newSourceItems = [...stores[storeSourceIndex].items];
-      const newDestinationItems =
-        source.droppableId !== destination.droppableId
-          ? [...stores[storeDestinationIndex].items]
-          : newSourceItems;
-  
-      const [deletedItem] = newSourceItems.splice(itemSourceIndex, 1);
-      newDestinationItems.splice(itemDestinationIndex, 0, deletedItem);
-  
-      const newStores = [...stores];
-  
-      newStores[storeSourceIndex] = {
-        ...stores[storeSourceIndex],
-        items: newSourceItems,
-      };
-      newStores[storeDestinationIndex] = {
-        ...stores[storeDestinationIndex],
-        items: newDestinationItems,
-      };
-  
-      setStores(newStores);
-    };
-  
-    return (
-      <div className="w-screen flex items-center select-none">
-        <div className="flex justify-center items-center ml-[100px] mt-[100px]">
-          <div className="w-[700px] h-[600px] rounded m-4 shadow-xl">
-            <div className="w-full h-full bg-white p-10 rounded">
-              <DragDropContext onDragEnd={handleDragAndDrop}>
-                <div className="text-center text-[20px] font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
-                  <h1>회의 구성 편집</h1>
+  const onDragEnd = (result) => {
+    const {source, destination} = result;
+
+    if (!destination) return;
+
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
+
+    let add;
+    let unactive = itemContainer;
+    let active = gridItemContainer;
+
+    if (source.droppableId === "ItemList") {
+      add = unactive[source.index];
+      unactive.splice(source.index, 1);
+    } else {
+      add = active[source.index];
+      active.splice(source.index, 1);
+    }
+
+    if (destination.droppableId === "GridArea") {
+      unactive.splice(destination.index, 0, add);
+    } else {
+      active.splice(destination.index, 0, add);
+    }
+
+    setGridItemContainer(active);
+    setItemContainer(unactive);
+  }
+
+  return(
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="w-[1540px] bg-white flex items-center gap-x-4">
+        <Droppable droppableId="GridArea">
+          {(provided) => (
+            <div ref={provided.innerRef} {...provided.droppableProps}>
+              <div className="w-[800px] h-[800px] bg-gray-100 m-8 pt-8 rounded-3xl shadow-xl text-center">
+                <span className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+                  회의 구성
+                </span>
+                <div className="grid gap-4 grid-cols-3 m-8">
+                  <DroppableCell id="cel11" height="h-16" colSpan="col-span-2" name="1" index={0}></DroppableCell>
+                  <DroppableCell id="cell2" height="h-16" colSpan="col-span-1" name="2" index={1}></DroppableCell>
+                  <DroppableCell id="cell3" height="h-24" colSpan="col-span-3" name="3" index={2}></DroppableCell>
+                  <DroppableCell id="cell4" height="h-72" colSpan="col-span-3" name="4" index={3}></DroppableCell>
+                  <DroppableCell id="cell5" height="h-40" colSpan="col-span-3" name="5" index={4}></DroppableCell>
+                </div>  
+              </div>
+            </div>
+           )}
+        </Droppable>
+        <Droppable droppableId="ItemList">
+          {(provided) => (
+            <div ref={provided.innerRef} {...provided.droppableProps}>
+              <div className="w-[300px] h-[420px] bg-gray-100 m-4 rounded-xl shadow-xl flex justify-center items-center">
+                <div className="flex flex-col justify-center items-center gap-y-2">
+                  {datas.map((data, index) => (
+                    <DraggableItem key={data.id} id={data.id} index={index} color={data.color} name={data.name} />
+                  ))}
                 </div>
-                <Droppable droppableId="ROOT" type="group">
-                  {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef} className="grid grid-cols-2 gap-1">
-                      {stores.map((store, index) => (
-                        <Draggable
-                          draggableId={store.id}
-                          index={index}
-                          key={store.id}
-                        >
-                          {(provided) => (
-                            <div
-                              {...provided.dragHandleProps}
-                              {...provided.draggableProps}
-                              ref={provided.innerRef}
-                              className={index < 2 ? "" : "col-span-2"}
-                            >
-                              <StoreList {...store} />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </div>
-          </div>
-          <div className="w-[300px] h-[500px] m-2">
-            <div className="w-full h-full bg-slate-400 rounded">
-                <DragDropContext onDragEnd={handleDragAndDrop}>
-                  <Droppable droppableId="ROOT" type="group">
-                    {(provided) => (
-                      <div {...provided.droppableProps} ref={provided.innerRef} className="flex-col gap-2">
-                        {stores.map((store, index) => (
-                          <Draggable
-                            draggableId={store.id}
-                            index={index}
-                            key={store.id}
-                          >
-                            {(provided) => (
-                              <div
-                                {...provided.dragHandleProps}
-                                {...provided.draggableProps}
-                                ref={provided.innerRef}
-                              >
-                                <StoreList {...store} />
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
-  function StoreList({ name, color, id }) {
-    return (
-      <Droppable droppableId={id}>
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            <div className={`text-center p-2 ${ color } rounded w-full`}>
-              <h3>{name}</h3>
-            </div>
+              </div>
               {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    );
-  }
+            </div>
+          )}
+        </Droppable>
+      </div>
+    </DragDropContext>
+  );
+}
 
 export default FinalNote;
