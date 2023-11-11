@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { DraggableItem, DroppableCell } from '../components';
 
-const datas = [
+const itemDatas = [
   {
     id: 1,
     name: "주제",
@@ -31,41 +31,55 @@ const datas = [
   }
 ];
 
+const gridCellDatas = [
+  {
+    id: "cell1",
+    height: "h-16",
+    colSpan: "col-span-2",
+  },
+  {
+    id: "cell2",
+    height: "h-16",
+    colSpan: "col-span-1",
+  },
+  {
+    id: "cell3",
+    height: "h-24",
+    colSpan: "col-span-3",
+  },
+  {
+    id: "cell4",
+    height: "h-72",
+    colSpan: "col-span-3",
+  },
+  {
+    id: "cell5",
+    height: "h-40",
+    colSpan: "col-span-3",
+  },
+];
+
 const FinalNote = () => {
-  const [itemContainer, setItemContainer] = useState([]);
-  const [gridItemContainer, setGridItemContainer] = useState([]);
+  const [itemContainer, setItemContainer] = useState(itemDatas);
+  const [gridItemContainer, setGridItemContainer] = useState(Array(5).fill([]).map(() => [...itemDatas]));
 
   const onDragEnd = (result) => {
-    const {source, destination} = result;
-
+    const { source, destination } = result;
+  
     if (!destination) return;
-
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
-      return;
-    }
-
-    let add;
-    let unactive = itemContainer;
-    let active = gridItemContainer;
-
-    if (source.droppableId === "ItemList") {
-      add = unactive[source.index];
-      unactive.splice(source.index, 1);
-    } else {
-      add = active[source.index];
-      active.splice(source.index, 1);
-    }
-
-    if (destination.droppableId === "GridArea") {
-      unactive.splice(destination.index, 0, add);
-    } else {
-      active.splice(destination.index, 0, add);
-    }
-
-    setGridItemContainer(active);
-    setItemContainer(unactive);
-  }
-
+  
+    const newGridItemContainer = [...gridItemContainer]; // Shallow copy of the gridItemContainer
+  
+    const sourceData = source.droppableId === 'ItemList' ? itemContainer : newGridItemContainer[source.droppableId];
+    const destinationData = destination.droppableId === 'ItemList' ? itemContainer : newGridItemContainer[destination.droppableId];
+  
+    const [removed] = sourceData.splice(source.index, 1);
+    destinationData.splice(destination.index, 0, removed);
+  
+    setGridItemContainer(newGridItemContainer); // Update grid container state
+    setItemContainer(itemContainer); // Update item container state
+  };
+  
   return(
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="w-[1540px] bg-white flex items-center gap-x-4">
@@ -77,22 +91,24 @@ const FinalNote = () => {
                   회의 구성
                 </span>
                 <div className="grid gap-4 grid-cols-3 m-8">
-                  <DroppableCell id="cel11" height="h-16" colSpan="col-span-2" name="1" index={0}></DroppableCell>
-                  <DroppableCell id="cell2" height="h-16" colSpan="col-span-1" name="2" index={1}></DroppableCell>
-                  <DroppableCell id="cell3" height="h-24" colSpan="col-span-3" name="3" index={2}></DroppableCell>
-                  <DroppableCell id="cell4" height="h-72" colSpan="col-span-3" name="4" index={3}></DroppableCell>
-                  <DroppableCell id="cell5" height="h-40" colSpan="col-span-3" name="5" index={4}></DroppableCell>
+                  {gridItemContainer.map((cellData, cellIndex) => (
+                    <DroppableCell key={`cell-${cellIndex}`} id={cellIndex} height={gridCellDatas[cellIndex].height} colSpan={gridCellDatas[cellIndex].colSpan} name={cellIndex + 1}>
+                      {cellData.map((data, index) => (
+                        <DraggableItem key={data.id} id={data.id.toString()} index={index} color={data.color} name={data.name}/>
+                      ))}
+                    </DroppableCell>
+                  ))}
                 </div>  
               </div>
             </div>
-           )}
+          )}
         </Droppable>
         <Droppable droppableId="ItemList">
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               <div className="w-[300px] h-[420px] bg-gray-100 m-4 rounded-xl shadow-xl flex justify-center items-center">
                 <div className="flex flex-col justify-center items-center gap-y-2">
-                  {datas.map((data, index) => (
+                  {itemContainer.map((data, index) => (
                     <DraggableItem key={data.id} id={data.id} index={index} color={data.color} name={data.name} />
                   ))}
                 </div>
