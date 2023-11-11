@@ -6,7 +6,7 @@ export const links1 = [
         title: 'Group 1',
         links: [
             {
-                name: 'home',
+                name: '',
                 icon: <ImHome3 />
             },
             {

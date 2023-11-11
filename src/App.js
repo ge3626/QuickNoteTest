@@ -53,7 +53,7 @@ function App() {
 
             <Routes>
               {/* Pages */}
-              <Route path="/home" element={<NoteTable />} />
+              <Route path="/" element={<NoteTable />} />
               <Route path="/login" element={<Login />} />
               <Route path="/user/notes" element={<NoteTable />} />
               <Route path="/folder" element={<Folder />}/>
